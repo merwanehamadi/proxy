@@ -1,6 +1,7 @@
 class PagesController < ApplicationController
   before_action :store_ip_address
   def home
+    @ip = request.remote_ip
     if params["url"]
       redirect_to action: "analyze", url: params["url"]
     end
