@@ -11,6 +11,5 @@ class PagesController < ApplicationController
   def store_ip_address
     session = Session.new(ip_address: request.remote_ip)
     session.save
-    raise
   end
 end
