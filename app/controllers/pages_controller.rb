@@ -9,8 +9,7 @@ class PagesController < ApplicationController
     @url = params["url"]
   end
   def store_ip_address
-    ipaddr1 = IPAddr.new(request.remote_ip).to_i
-    session = Session.new(ip_address: ipaddr1)
+    session = Session.new(ip_address: request.remote_ip)
     session.save
   end
 end
