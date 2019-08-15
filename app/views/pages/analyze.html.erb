@@ -1,26 +1,14 @@
 <%
 require 'nokogiri'
 require 'open-uri'
-require 'pp'
-html = Nokogiri::HTML(open 'http://stackoverflow.com/questions/6129357')
 
+html = Nokogiri::HTML(open @url)
+html.css('script').remove
+html.css('style').remove
+#words = html.at('body').inner_text.scan(/[a-z]+/i)
 
-text  = html.at('body').inner_text
-
-# Pretend that all words we care about contain only a-z, 0-9, or underscores
-words = text.scan(/\w+/)
-p words.length, words.uniq.length, words.uniq.sort[0..8]
-#=> 907
-#=> 428
-#=> ["0", "1", "100", "15px", "2", "20", "2011", "220px", "24158nokogiri"]
-
-# How about words that are only letters?
-words = text.scan(/[a-z]+/i)
-p words.length, words.uniq.length, words.uniq.sort[0..5]
-#=> 872
-#=> 406
-#=> ["Answer", "Ask", "Badges", "Browse", "DocumentFragment", "Email"]
-# Find the most frequent words
+words = Nokogiri::HTML(html.inner_html
+).xpath('//text()').map(&:text).join(' ').scan(/[a-z]+/i)
 
 def frequencies(words)
   Hash[
@@ -29,35 +17,10 @@ def frequencies(words)
     }.sort_by(&:last).reverse
   ]
 end
-pp frequencies(words)
-#=> {"nokogiri"=>34,
-#=>  "a"=>27,
-#=>  "html"=>18,
-#=>  "function"=>17,
-#=>  "s"=>13,
-#=>  "var"=>13,
-#=>  "b"=>12,
-#=>  "c"=>11,
-#=>  ...
-
-# Hrm...let's drop the javascript code out of our words
-html.css('script').remove
-words = html.at('body').inner_text.scan(/\w+/)
-pp frequencies(words)
-#=> {"nokogiri"=>36,
-#=>  "words"=>18,
-#=>  "html"=>17,
-#=>  "text"=>13,
-#=>  "with"=>12,
-#=>  "a"=>12,
-#=>  "the"=>11,
-#=>  "and"=>11,
-#=>  ...
  %>
 
-
 <% words.each do |word| %>
-  <span class="<%= word %>">
+  <span class="analyzer-<%= word.downcase %>">
     <%= word %>
   </span>
 <% end %>
