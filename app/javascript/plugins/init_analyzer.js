@@ -6,7 +6,7 @@ const initAnalyzer =  () => {
       Array.from(document.querySelectorAll("span")).forEach((element) => {
         element.classList.remove("mark");
       });
-      Array.from(document.getElementsByClassName(`${event.target.innerText}`)).forEach((element) => {
+      Array.from(document.getElementsByClassName(`analyzer-${event.target.innerText}`)).forEach((element) => {
         element.classList.add("mark");
       });
       // Run your code to open a modal
