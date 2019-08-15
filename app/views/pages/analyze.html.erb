@@ -1,8 +1,6 @@
 <%
 require 'nokogiri'
 require 'open-uri'
-source = open(@url){|f|f.read}
-
 
 html = Nokogiri::HTML(open @url)
 html.css('script').remove
